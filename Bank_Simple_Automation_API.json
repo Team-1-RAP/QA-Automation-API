@@ -1,0 +1,3365 @@
+{
+	"info": {
+		"_postman_id": "5f4f885f-9f93-4661-92df-71886afb1f27",
+		"name": "Bank_Simple_1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34678617",
+		"_collection_link": "https://winter-resonance-96807.postman.co/workspace/Simple_Bank-Team-1~1877dcc2-9e17-4c2d-8a49-91af9149886a/collection/34678617-5f4f885f-9f93-4661-92df-71886afb1f27?action=share&source=collection_link&creator=34678617"
+	},
+	"item": [
+		{
+			"name": "Bank_Simple",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"code\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"message\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"status\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"data\": {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"accessToken\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"tokenType\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"refreshToken\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"expiresIn\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"scope\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"jti\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\r",
+											"        \"accessToken\",\r",
+											"        \"tokenType\",\r",
+											"        \"refreshToken\",\r",
+											"        \"expiresIn\",\r",
+											"        \"scope\",\r",
+											"        \"jti\"\r",
+											"      ]\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"code\",\r",
+											"    \"message\",\r",
+											"    \"status\",\r",
+											"    \"data\"\r",
+											"  ]\r",
+											"};\r",
+											"// Validate the response status code\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Validate the response structure against the schema\r",
+											"pm.test(\"Response schema is valid\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// Check if the response contains the 'accessToken' property\r",
+											"pm.test(\"Response has an accessToken\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.data).to.have.property(\"accessToken\");\r",
+											"});\r",
+											"\r",
+											"// Check if the 'tokenType' in response is 'bearer'\r",
+											"pm.test(\"Response tokenType is bearer\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.data.tokenType).to.equal(\"bearer\");\r",
+											"});\r",
+											"\r",
+											"// Additional checks for response time and headers\r",
+											"pm.test(\"Response time is less than 22560ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(22560);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type header is present\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"qa.api\",\r\n  \"password\": \"Password123@\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/auth/login",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Account",
+					"item": [
+						{
+							"name": "account",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Mengambil respon body\r",
+											"let response = pm.response.json();\r",
+											"\r",
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi pesan sukses\r",
+											"pm.test(\"Message is 'Success get account'\", function () {\r",
+											"    pm.expect(response.message).to.eql(\"Success get account\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi status true\r",
+											"pm.test(\"Status is true\", function () {\r",
+											"    pm.expect(response.status).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur data\r",
+											"pm.test(\"Data structure is correct\", function () {\r",
+											"    pm.expect(response.data).to.be.an(\"array\");\r",
+											"    pm.expect(response.data.length).to.be.above(0);\r",
+											"\r",
+											"    // Loop melalui setiap account di dalam data array\r",
+											"    response.data.forEach((account, index) => {\r",
+											"        pm.test(`Verify account structure for item ${index + 1}`, function () {\r",
+											"            pm.expect(account).to.have.property(\"noAccount\");\r",
+											"            pm.expect(account).to.have.property(\"fullName\");\r",
+											"            pm.expect(account).to.have.property(\"accountType\");\r",
+											"            pm.expect(account).to.have.property(\"cardNumber\");\r",
+											"            pm.expect(account).to.have.property(\"expDate\");\r",
+											"            pm.expect(account).to.have.property(\"balance\");\r",
+											"            pm.expect(account).to.have.property(\"pin\");\r",
+											"\r",
+											"            // Verifikasi beberapa nilai contoh (bisa dikustomisasi sesuai keperluan)\r",
+											"            if (account.noAccount === \"0120000012\") {\r",
+											"                pm.expect(account.accountType).to.eql(\"GOLD\");\r",
+											"                pm.expect(account.balance).to.be.closeTo(9.99987938E8, 0.0001); // Perbandingan floating-point untuk balance\r",
+											"            } else {\r",
+											"                pm.expect(account.accountType).to.eql(\"BRONZE\");\r",
+											"                pm.expect(account.balance).to.eql(50000.0);\r",
+											"            }\r",
+											"        });\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/accounts",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "profile",
+					"item": [
+						{
+							"name": "profiles",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Mengambil respon body\r",
+											"let response = pm.response.json();\r",
+											"\r",
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi pesan sukses\r",
+											"pm.test(\"Message is 'Success Get Profile'\", function () {\r",
+											"    pm.expect(response.message).to.eql(\"Success Get Profile\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi status true\r",
+											"pm.test(\"Status is true\", function () {\r",
+											"    pm.expect(response.status).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur data\r",
+											"pm.test(\"Data structure is correct\", function () {\r",
+											"    pm.expect(response.data).to.be.an(\"object\");\r",
+											"    \r",
+											"    pm.expect(response.data).to.have.property(\"username\");\r",
+											"    pm.expect(response.data).to.have.property(\"phoneNumber\");\r",
+											"    pm.expect(response.data).to.have.property(\"email\");\r",
+											"    pm.expect(response.data).to.have.property(\"bornDate\");\r",
+											"    pm.expect(response.data).to.have.property(\"address\");\r",
+											"    pm.expect(response.data).to.have.property(\"nik\");\r",
+											"\r",
+											"    // Verifikasi nilai properti\r",
+											"    pm.expect(response.data.username).to.eql(\"qa.api\");\r",
+											"    pm.expect(response.data.phoneNumber).to.be.null;\r",
+											"    pm.expect(response.data.email).to.eql(\"qa.api@mail.com\");\r",
+											"    pm.expect(response.data.bornDate).to.eql(\"2002-11-22T00:00\");\r",
+											"    pm.expect(response.data.address).to.eql(\"Jl. Seminarium Sipoholon\");\r",
+											"    pm.expect(response.data.nik).to.eql(\"12345678900918\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/profiles",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"profiles"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Mutation",
+					"item": [
+						{
+							"name": "mutation_transaction",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verify status code\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verify response structure and values\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify the main structure\r",
+											"    pm.expect(jsonData).to.have.property(\"code\").that.is.a(\"number\");\r",
+											"    pm.expect(jsonData).to.have.property(\"message\").that.is.a(\"string\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\").that.is.a(\"boolean\");\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    // Verify the properties of the data object\r",
+											"    pm.expect(jsonData.data).to.have.property(\"currentPage\").that.is.a(\"number\");\r",
+											"    pm.expect(jsonData.data).to.have.property(\"totalPage\").that.is.a(\"number\");\r",
+											"    pm.expect(jsonData.data).to.have.property(\"size\").that.is.a(\"number\");\r",
+											"    pm.expect(jsonData.data).to.have.property(\"totalItem\").that.is.a(\"number\");\r",
+											"\r",
+											"    // Verify the pagingData array\r",
+											"    pm.expect(jsonData.data).to.have.property(\"pagingData\").that.is.an(\"array\");\r",
+											"\r",
+											"    // Check each item in the pagingData array\r",
+											"    jsonData.data.pagingData.forEach(function(item, index) {\r",
+											"        pm.expect(item).to.have.property(\"date\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"amount\").that.is.a(\"number\");\r",
+											"        pm.expect(item).to.have.property(\"transactionType\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"recipientTargetAccount\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"transactionStatus\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"mutationType\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"recipientName\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"type\").that.is.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// Log response for debugging\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/mutations/0120000012?month=8&page=0&size=10",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"mutations",
+										"0120000012"
+									],
+									"query": [
+										{
+											"key": "month",
+											"value": "8"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "mutations_amount",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test to verify that the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test to verify that the response structure and values are correct\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify the presence and correctness of code, message, status, and data properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Success Get Mutation amounts\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    // Verify that income and spending are present and are numbers\r",
+											"    pm.expect(jsonData.data).to.have.property(\"income\").that.is.a(\"number\");\r",
+											"    pm.expect(jsonData.data).to.have.property(\"spending\").that.is.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"// General test to log and verify the income and spending values\r",
+											"pm.test(\"Income and Spending are valid numbers\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Log the values for debugging purposes\r",
+											"    console.log(\"Income:\", jsonData.data.income);\r",
+											"    console.log(\"Spending:\", jsonData.data.spending);\r",
+											"\r",
+											"    // Ensure both are numbers and non-negative\r",
+											"    pm.expect(jsonData.data.income).to.be.a(\"number\").and.to.be.at.least(0);\r",
+											"    pm.expect(jsonData.data.spending).to.be.a(\"number\").and.to.be.at.least(0);\r",
+											"});\r",
+											"\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/mutations/0120000012/amounts",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"mutations",
+										"0120000012",
+										"amounts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bank",
+					"item": [
+						{
+							"name": "banks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Mengambil respon body\r",
+											"let response = pm.response.json();\r",
+											"\r",
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi pesan sukses\r",
+											"pm.test(\"Message is 'Success Get All Banks'\", function () {\r",
+											"    pm.expect(response.message).to.eql(\"Success Get All Banks\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur respon\r",
+											"pm.test(\"Response structure is correct\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama pada body respon\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Success Get All Banks\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"array\");\r",
+											"    pm.expect(jsonData.data).to.have.lengthOf.at.least(1);\r",
+											"\r",
+											"    // Verifikasi setiap item dalam data array\r",
+											"    jsonData.data.forEach(bank => {\r",
+											"        pm.expect(bank).to.have.property(\"id\").that.is.a(\"number\");\r",
+											"        pm.expect(bank).to.have.property(\"bankName\").that.is.a(\"string\");\r",
+											"        pm.expect(bank).to.have.property(\"adminFee\").that.is.a(\"number\");\r",
+											"        \r",
+											"        // Verifikasi tanggal dan waktu sebagai string\r",
+											"        pm.expect(bank).to.have.property(\"createdDate\").that.is.a(\"string\");\r",
+											"        pm.expect(bank).to.have.property(\"updatedDate\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verifikasi deletedDate sebagai null\r",
+											"        pm.expect(bank).to.have.property(\"deletedDate\").that.is.null;\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/banks",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"banks"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bank_Transfer",
+					"item": [
+						{
+							"name": "bank_transfer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Create transaction success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi detail akun pengirim\r",
+											"    pm.expect(data).to.have.property(\"sourceFullName\", \"QA Api\");\r",
+											"    pm.expect(data).to.have.property(\"sourceAccountNo\", \"0120000012\");\r",
+											"    pm.expect(data).to.have.property(\"sourceBankName\", \"BCA\");\r",
+											"\r",
+											"    // Verifikasi jumlah\r",
+											"    pm.expect(data).to.have.property(\"amount\").to.be.closeTo(180.0, 0.01);\r",
+											"\r",
+											"    // Verifikasi detail transaksi\r",
+											"    pm.expect(data).to.have.property(\"transactionId\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"transactionType\", \"TRANSFER\");\r",
+											"\r",
+											"    // Verifikasi detail akun penerima\r",
+											"    pm.expect(data).to.have.property(\"recipientBankName\", \"BCA\");\r",
+											"    pm.expect(data).to.have.property(\"recipientBankAccountNo\", \"0110000104\");\r",
+											"    pm.expect(data).to.have.property(\"recipientFullName\", \"QA Api\");\r",
+											"\r",
+											"    // Verifikasi nomor referensi transaksi dan tanggal\r",
+											"    pm.expect(data).to.have.property(\"noRef\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"date\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 3742ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(3742);\r",
+											"});\r",
+											"\r",
+											"// Log untuk melihat body respon dan waktu respon\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"accountNo\": \"0120000012\",\r\n  \"recipientAccountNo\": \"0110000104\",\r\n  \"recipientBankName\": \"BCA\",\r\n  \"amount\": 180.000,\r\n  \"pin\": \"123456\",\r\n  \"description\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/bank-transfers",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"bank-transfers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Qris",
+					"item": [
+						{
+							"name": "generate_qris",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"code\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"message\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"status\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"data\": {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"qrCode\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"dueDate\": {\r",
+											"          \"type\": \"string\",\r",
+											"          \"format\": \"date-time\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\r",
+											"        \"qrCode\",\r",
+											"        \"dueDate\"\r",
+											"      ]\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"code\",\r",
+											"    \"message\",\r",
+											"    \"status\",\r",
+											"    \"data\"\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"// Validate the response status code\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Validate the response structure against the schema\r",
+											"pm.test(\"Response schema is valid\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// Check if the response contains the 'qrCode' property\r",
+											"pm.test(\"Response has a qrCode\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.data).to.have.property(\"qrCode\");\r",
+											"});\r",
+											"\r",
+											"// Check if the 'dueDate' format is valid\r",
+											"pm.test(\"dueDate is a valid ISO 8601 date-time\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    const dueDate = jsonData.data.dueDate;\r",
+											"\r",
+											"    // Convert both API dueDate and generated date to timestamps for comparison\r",
+											"    const dueDateTimestamp = new Date(dueDate).getTime(); // Convert API dueDate to timestamp\r",
+											"    const expectedDateTimestamp = new Date(dueDate).getTime(); // Convert expected ISO date to timestamp\r",
+											"    \r",
+											"    // Compare timestamps (ignores timezone differences)\r",
+											"    pm.expect(dueDateTimestamp).to.equal(expectedDateTimestamp);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											"// Additional checks for response time and headers\r",
+											"pm.test(\"Response time is less than 22560ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(22560);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type header is present\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"accountNo\": \"0120000012\",\r\n  \"amount\": 12000,\r\n  \"pin\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/qris/generate-qr-code",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"qris",
+										"generate-qr-code"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Confirm_Qris_receives",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Confirm QRIS receives funds success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi detail akun pengirim\r",
+											"    pm.expect(data).to.have.property(\"sourceFullName\", \"QA Api\");\r",
+											"    pm.expect(data).to.have.property(\"sourceAccountNo\", \"0120000012\");\r",
+											"    pm.expect(data).to.have.property(\"sourceBankName\", \"BCA\");\r",
+											"\r",
+											"    // Verifikasi jumlah\r",
+											"    pm.expect(data).to.have.property(\"amount\").to.be.closeTo(12000.0, 0.01);\r",
+											"\r",
+											"    // Verifikasi detail transaksi\r",
+											"    pm.expect(data).to.have.property(\"transactionId\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"transactionType\", \"QRIS\");\r",
+											"\r",
+											"    // Verifikasi detail akun penerima\r",
+											"    pm.expect(data).to.have.property(\"recipientBankName\", \"BCA\");\r",
+											"    pm.expect(data).to.have.property(\"recipientBankAccountNo\", \"0130000025\");\r",
+											"    pm.expect(data).to.have.property(\"recipientFullName\", \"Yulinar Nur Rahmawati\");\r",
+											"\r",
+											"    // Verifikasi nomor referensi transaksi dan tanggal\r",
+											"    pm.expect(data).to.have.property(\"noRef\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"date\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 3000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+											"});\r",
+											"\r",
+											"// Log untuk melihat body respon dan waktu respon\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6Ill1bGluYXIgTnVyIFJhaG1hd2F0aSIsInVzZXJfbmFtZSI6Inl1bGluYXJuciIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTc2LCJleHAiOjE3MjQ3OTY0MzEsImF1dGhvcml0aWVzIjpbIlJPTEVfU1VQRVJVU0VSIiwiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiJRZXA5MW0xbTFaSnB2Uy1KbzZpWWxhVVFzcVEiLCJjbGllbnRfaWQiOiJteS1jbGllbnQtd2ViIn0.G4Xdb8jYiMCH95XAEYBuyXzDxelobaFyLEcGxjf94u0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"qrCode\": \"ACC4190129541\",\r\n  \"accountNo\": \"0130000025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/qris/confirm-qris-receives",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"qris",
+										"confirm-qris-receives"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Confirm_Qris_Merchant",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Confirm QRIS Merchants success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi detail akun pengirim\r",
+											"    pm.expect(data).to.have.property(\"sourceFullName\", \"QA Api\");\r",
+											"    pm.expect(data).to.have.property(\"sourceAccountNo\", \"0120000012\");\r",
+											"    pm.expect(data).to.have.property(\"sourceBankName\", \"BCA\");\r",
+											"\r",
+											"    // Verifikasi jumlah\r",
+											"    pm.expect(data).to.have.property(\"amount\").to.be.closeTo(12000.0, 0.01);\r",
+											"\r",
+											"    // Verifikasi detail transaksi\r",
+											"    pm.expect(data).to.have.property(\"transactionId\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"transactionType\", \"QRIS\");\r",
+											"\r",
+											"    // Verifikasi detail akun penerima (merchant)\r",
+											"    pm.expect(data).to.have.property(\"recipientBankName\", \"Merchant\");\r",
+											"    pm.expect(data).to.have.property(\"recipientBankAccountNo\", \"1\");\r",
+											"    pm.expect(data).to.have.property(\"recipientFullName\", \"Toko Madura 1\");\r",
+											"\r",
+											"    // Verifikasi nomor referensi transaksi dan tanggal\r",
+											"    pm.expect(data).to.have.property(\"noRef\").that.is.a(\"string\");\r",
+											"    pm.expect(data).to.have.property(\"date\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 3000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+											"});\r",
+											"\r",
+											"// Log untuk melihat body respon dan waktu respon\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"qrCode\": \"MRCHNT2174211907\",\r\n  \"accountNo\": \"0120000012\",\r\n  \"amount\": 12000,\r\n  \"pin\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/qris/confirm-qris-merchant",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"qris",
+										"confirm-qris-merchant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Qris_Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Get QRIS Status success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi status pembayaran\r",
+											"    pm.expect(data).to.have.property(\"isPaid\", true);\r",
+											"\r",
+											"    // Verifikasi detail pengguna\r",
+											"    pm.expect(data).to.have.property(\"name\", \"QA Api\");\r",
+											"\r",
+											"    // Verifikasi jumlah\r",
+											"    pm.expect(data).to.have.property(\"amount\").to.be.closeTo(12000.0, 0.01);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 3000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+											"});\r",
+											"\r",
+											"// Log untuk melihat body respon dan waktu respon\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6Ill1bGluYXIgTnVyIFJhaG1hd2F0aSIsInVzZXJfbmFtZSI6Inl1bGluYXJuciIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTc2LCJleHAiOjE3MjQ3OTY0MzEsImF1dGhvcml0aWVzIjpbIlJPTEVfU1VQRVJVU0VSIiwiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiJRZXA5MW0xbTFaSnB2Uy1KbzZpWWxhVVFzcVEiLCJjbGllbnRfaWQiOiJteS1jbGllbnQtd2ViIn0.G4Xdb8jYiMCH95XAEYBuyXzDxelobaFyLEcGxjf94u0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/qris/validate-qr-code/ACC3227504916",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"qris",
+										"validate-qr-code",
+										"ACC3227504916"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scan Qris",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Scan QRIS success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi nama pengirim\r",
+											"    pm.expect(data).to.have.property(\"senderName\", \"Toko Madura 1\");\r",
+											"\r",
+											"    // Verifikasi jumlah (null)\r",
+											"    pm.expect(data).to.have.property(\"amount\").that.is.null;\r",
+											"\r",
+											"    // Verifikasi kode QR\r",
+											"    pm.expect(data).to.have.property(\"qrCode\", \"MRCHNT2174211907\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 3000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+											"});\r",
+											"\r",
+											"// Log untuk melihat body respon dan waktu respon\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6Ill1bGluYXIgTnVyIFJhaG1hd2F0aSIsInVzZXJfbmFtZSI6Inl1bGluYXJuciIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTc2LCJleHAiOjE3MjQ3OTY0MzEsImF1dGhvcml0aWVzIjpbIlJPTEVfU1VQRVJVU0VSIiwiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiJRZXA5MW0xbTFaSnB2Uy1KbzZpWWxhVVFzcVEiLCJjbGllbnRfaWQiOiJteS1jbGllbnQtd2ViIn0.G4Xdb8jYiMCH95XAEYBuyXzDxelobaFyLEcGxjf94u0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/qris/scan-qris/MRCHNT2174211907",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"qris",
+										"scan-qris",
+										"MRCHNT2174211907"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "login_qr",
+					"item": [
+						{
+							"name": "login_qris",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"yulinarnr\",\r\n  \"password\": \"Password123@\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simple-bank-server-avi4q6gcnq-uc.a.run.app/api/v1/auth/login",
+									"protocol": "https",
+									"host": [
+										"simple-bank-server-avi4q6gcnq-uc",
+										"a",
+										"run",
+										"app"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "BE-FSW",
+			"item": [
+				{
+					"name": "Account",
+					"item": [
+						{
+							"name": "AccountTypes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama dari respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Get all account types success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi bahwa 'data' adalah array\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"array\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi setiap elemen di dalam array 'data'\r",
+											"    pm.expect(data).to.have.length(3); // Pastikan ada 3 jenis akun\r",
+											"\r",
+											"    // Verifikasi detail untuk masing-masing jenis akun\r",
+											"    pm.expect(data[0]).to.include({\r",
+											"        id: 1,\r",
+											"        code: \"10\",\r",
+											"        type: \"BRONZE\"\r",
+											"    });\r",
+											"    pm.expect(data[0]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[0]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"\r",
+											"    pm.expect(data[1]).to.include({\r",
+											"        id: 2,\r",
+											"        code: \"20\",\r",
+											"        type: \"GOLD\"\r",
+											"    });\r",
+											"    pm.expect(data[1]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[1]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"\r",
+											"    pm.expect(data[2]).to.include({\r",
+											"        id: 3,\r",
+											"        code: \"30\",\r",
+											"        type: \"PLATINUM\"\r",
+											"    });\r",
+											"    pm.expect(data[2]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[2]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional tests or logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simplebank.my.id/v1/account/type/accountTypes",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"account",
+										"type",
+										"accountTypes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "accountPurposes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama dari respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Get all account purposes success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi bahwa 'data' adalah array\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"array\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi setiap elemen di dalam array 'data'\r",
+											"    pm.expect(data).to.have.length(3); // Pastikan ada 3 tujuan akun\r",
+											"\r",
+											"    // Verifikasi detail untuk masing-masing tujuan akun\r",
+											"    pm.expect(data[0]).to.include({\r",
+											"        id: 1,\r",
+											"        type: \"Tabungan\"\r",
+											"    });\r",
+											"    pm.expect(data[0]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[0]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"\r",
+											"    pm.expect(data[1]).to.include({\r",
+											"        id: 2,\r",
+											"        type: \"Investasi\"\r",
+											"    });\r",
+											"    pm.expect(data[1]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[1]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"\r",
+											"    pm.expect(data[2]).to.include({\r",
+											"        id: 3,\r",
+											"        type: \"Bisnis\"\r",
+											"    });\r",
+											"    pm.expect(data[2]).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(data[2]).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional tests or logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://simplebank.my.id/v1/account/purposes/accountPurposes",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"account",
+										"purposes",
+										"accountPurposes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "account_type",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"accountTypeId\": 1,\r\n  \"address\": \"Jl. Seminari\",\r\n  \"accountPurposeId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/account/new/accountType",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"account",
+										"new",
+										"accountType"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new_pin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"pin\": \"654321\",\r\n  \"confirmPin\": \"654321\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/account/new-pin/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJhY2NvdW50X25vIjoiMDExMDAwMDEzMiIsImlhdCI6MTcyNDc3NzMyNywiZXhwIjoxNzI0ODYzNzI3fQ.Xl5mM2MSxG9oNpWGhK65TngzdLISsGR806p1m2IsKmk",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"account",
+										"new-pin",
+										"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJhY2NvdW50X25vIjoiMDExMDAwMDEzMiIsImlhdCI6MTcyNDc3NzMyNywiZXhwIjoxNzI0ODYzNzI3fQ.Xl5mM2MSxG9oNpWGhK65TngzdLISsGR806p1m2IsKmk"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "bank_validation",
+					"item": [
+						{
+							"name": "bank validation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verifikasi properti utama dari respons\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Bank transfer validation success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verifikasi objek data\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verifikasi detail data user\r",
+											"    pm.expect(data).to.have.property(\"user_id\", \"10\");\r",
+											"    pm.expect(data).to.have.property(\"account_no\", \"0110000066\");\r",
+											"    pm.expect(data).to.have.property(\"bank_id\", \"1\");\r",
+											"\r",
+											"    // Verifikasi objek bank_destination\r",
+											"    pm.expect(data).to.have.property(\"bank_destination\").that.is.an(\"object\");\r",
+											"\r",
+											"    var bankDestination = data.bank_destination;\r",
+											"\r",
+											"    pm.expect(bankDestination).to.have.property(\"id\", \"1\");\r",
+											"    pm.expect(bankDestination).to.have.property(\"name\", \"BCA\");\r",
+											"    pm.expect(bankDestination).to.have.property(\"adminFee\", 0);\r",
+											"\r",
+											"    // Verifikasi objek recipient_account\r",
+											"    pm.expect(data).to.have.property(\"recipient_account\").that.is.an(\"object\");\r",
+											"\r",
+											"    var recipientAccount = data.recipient_account;\r",
+											"\r",
+											"    pm.expect(recipientAccount).to.have.property(\"id\", \"10\");\r",
+											"    pm.expect(recipientAccount).to.have.property(\"username\", \"qa.api\");\r",
+											"    pm.expect(recipientAccount).to.have.property(\"fullname\", \"QA Api\");\r",
+											"    pm.expect(recipientAccount).to.have.property(\"account_no\", \"0120000012\");\r",
+											"    pm.expect(recipientAccount).to.have.property(\"atm_card_no\", \"3737657598213519\");\r",
+											"    pm.expect(recipientAccount).to.have.property(\"balance\", 999879578);\r",
+											"    pm.expect(recipientAccount).to.have.property(\"bank_id\", \"1\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4001ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4001);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional tests or logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"bank_id\": 1,\r\n  \"recipient_no_account\": \"0120000012\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://35.208.108.76/v1/transfer/validation/bank",
+									"protocol": "http",
+									"host": [
+										"35",
+										"208",
+										"108",
+										"76"
+									],
+									"path": [
+										"v1",
+										"transfer",
+										"validation",
+										"bank"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "change password",
+					"item": [
+						{
+							"name": "current_password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify main response properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\");\r",
+											"    pm.expect(jsonData).to.have.property(\"message\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\");\r",
+											"\r",
+											"    // Verify data object\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verify basic account details\r",
+											"    pm.expect(data).to.have.property(\"atm_card_no\");\r",
+											"    pm.expect(data).to.have.property(\"account_no\");\r",
+											"    pm.expect(data).to.have.property(\"balance\");\r",
+											"\r",
+											"    // Verify customer_data object\r",
+											"    pm.expect(data).to.have.property(\"customer_data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var customerData = data.customer_data;\r",
+											"\r",
+											"    pm.expect(customerData).to.have.property(\"id\");\r",
+											"    pm.expect(customerData).to.have.property(\"username\");\r",
+											"    pm.expect(customerData).to.have.property(\"fullname\");\r",
+											"    pm.expect(customerData).to.have.property(\"email\");\r",
+											"    pm.expect(customerData).to.have.property(\"born_date\");\r",
+											"\r",
+											"    // Verify flag_user object\r",
+											"    pm.expect(data).to.have.property(\"flag_user\").that.is.an(\"object\");\r",
+											"\r",
+											"    var flagUser = data.flag_user;\r",
+											"\r",
+											"    pm.expect(flagUser).to.have.property(\"is_currentPass_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_email_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_verified\");\r",
+											"    pm.expect(flagUser).to.have.property(\"updated_at\");\r",
+											"\r",
+											"    // Verify step_validation and created_date\r",
+											"    pm.expect(data).to.have.property(\"step_validation\");\r",
+											"    pm.expect(data).to.have.property(\"created_date\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"current_password\": \"Password123@\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/change/password/validation/currentPassword",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"change",
+										"password",
+										"validation",
+										"currentPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify main response properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Email validation success, check your email for OTP code\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verify data object\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verify basic account details\r",
+											"    pm.expect(data).to.have.property(\"atm_card_no\");\r",
+											"    pm.expect(data).to.have.property(\"account_no\");\r",
+											"    pm.expect(data).to.have.property(\"customer_id\");\r",
+											"    pm.expect(data).to.have.property(\"balance\");\r",
+											"\r",
+											"    // Verify customer_data object\r",
+											"    pm.expect(data).to.have.property(\"customer_data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var customerData = data.customer_data;\r",
+											"\r",
+											"    pm.expect(customerData).to.have.property(\"id\");\r",
+											"    pm.expect(customerData).to.have.property(\"username\");\r",
+											"    pm.expect(customerData).to.have.property(\"fullname\");\r",
+											"    pm.expect(customerData).to.have.property(\"email\");\r",
+											"    pm.expect(customerData).to.have.property(\"born_date\");\r",
+											"\r",
+											"    // Verify flag_user object\r",
+											"    pm.expect(data).to.have.property(\"flag_user\").that.is.an(\"object\");\r",
+											"\r",
+											"    var flagUser = data.flag_user;\r",
+											"\r",
+											"    pm.expect(flagUser).to.have.property(\"is_currentPass_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_email_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_verified\");\r",
+											"    pm.expect(flagUser).to.have.property(\"updated_at\");\r",
+											"\r",
+											"    // Verify otp_code object\r",
+											"    pm.expect(data).to.have.property(\"otp_code\").that.is.an(\"object\");\r",
+											"\r",
+											"    var otpCode = data.otp_code;\r",
+											"\r",
+											"    pm.expect(otpCode).to.have.property(\"otp\");\r",
+											"    pm.expect(otpCode).to.have.property(\"otp_expired_date\");\r",
+											"\r",
+											"    // Verify step_validation and created_date\r",
+											"    pm.expect(data).to.have.property(\"step_validation\");\r",
+											"    pm.expect(data).to.have.property(\"created_date\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"qa.api@mail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/change/password/validation/email",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"change",
+										"password",
+										"validation",
+										"email"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "otp",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify main response properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"OTP verification success\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verify data object\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verify basic account details\r",
+											"    pm.expect(data).to.have.property(\"atm_card_no\");\r",
+											"    pm.expect(data).to.have.property(\"account_no\");\r",
+											"    pm.expect(data).to.have.property(\"customer_id\");\r",
+											"    pm.expect(data).to.have.property(\"balance\");\r",
+											"\r",
+											"    // Verify customer_data object\r",
+											"    pm.expect(data).to.have.property(\"customer_data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var customerData = data.customer_data;\r",
+											"\r",
+											"    pm.expect(customerData).to.have.property(\"id\");\r",
+											"    pm.expect(customerData).to.have.property(\"username\");\r",
+											"    pm.expect(customerData).to.have.property(\"fullname\");\r",
+											"    pm.expect(customerData).to.have.property(\"email\");\r",
+											"    pm.expect(customerData).to.have.property(\"born_date\");\r",
+											"\r",
+											"    // Verify flag_user object\r",
+											"    pm.expect(data).to.have.property(\"flag_user\").that.is.an(\"object\");\r",
+											"\r",
+											"    var flagUser = data.flag_user;\r",
+											"\r",
+											"    pm.expect(flagUser).to.have.property(\"is_currentPass_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_email_valid\");\r",
+											"    pm.expect(flagUser).to.have.property(\"is_verified\", true);\r",
+											"    pm.expect(flagUser).to.have.property(\"updated_at\");\r",
+											"\r",
+											"    // Verify otp_code object\r",
+											"    pm.expect(data).to.have.property(\"otp_code\").that.is.an(\"object\");\r",
+											"\r",
+											"    var otpCode = data.otp_code;\r",
+											"\r",
+											"    pm.expect(otpCode).to.have.property(\"otp\");\r",
+											"    pm.expect(otpCode).to.have.property(\"otp_expired_date\");\r",
+											"\r",
+											"    // Verify step_validation and created_date\r",
+											"    pm.expect(data).to.have.property(\"step_validation\", 3);\r",
+											"    pm.expect(data).to.have.property(\"created_date\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"otp\": \"580991\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/change/password/validation/otpVerify",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"change",
+										"password",
+										"validation",
+										"otpVerify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change_password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify main response properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 200);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Success. New password has been completed, please login with your new password!\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verify data object\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verify basic account details\r",
+											"    pm.expect(data).to.have.property(\"atm_card_no\");\r",
+											"    pm.expect(data).to.have.property(\"account_no\");\r",
+											"    pm.expect(data).to.have.property(\"customer_id\");\r",
+											"    pm.expect(data).to.have.property(\"balance\");\r",
+											"\r",
+											"    // Verify customer_data object\r",
+											"    pm.expect(data).to.have.property(\"customer_data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var customerData = data.customer_data;\r",
+											"\r",
+											"    pm.expect(customerData).to.have.property(\"id\");\r",
+											"    pm.expect(customerData).to.have.property(\"username\");\r",
+											"    pm.expect(customerData).to.have.property(\"fullname\");\r",
+											"    pm.expect(customerData).to.have.property(\"email\");\r",
+											"    pm.expect(customerData).to.have.property(\"born_date\");\r",
+											"\r",
+											"    // Verify flag_user object\r",
+											"    pm.expect(data).to.have.property(\"flag_user\").that.is.an(\"object\");\r",
+											"\r",
+											"    var flagUser = data.flag_user;\r",
+											"\r",
+											"    pm.expect(flagUser).to.have.property(\"is_currentPass_valid\", null);\r",
+											"    pm.expect(flagUser).to.have.property(\"is_email_valid\", null);\r",
+											"    pm.expect(flagUser).to.have.property(\"is_verified\", null);\r",
+											"    pm.expect(flagUser).to.have.property(\"updated_at\");\r",
+											"\r",
+											"    // Verify otp_code object\r",
+											"    pm.expect(data).to.have.property(\"otp_code\").that.is.an(\"object\");\r",
+											"\r",
+											"    var otpCode = data.otp_code;\r",
+											"\r",
+											"    pm.expect(otpCode).to.have.property(\"otp\", null);\r",
+											"    pm.expect(otpCode).to.have.property(\"otp_expired_date\", null);\r",
+											"\r",
+											"    // Verify step_validation and created_date\r",
+											"    pm.expect(data).to.have.property(\"step_validation\", 4);\r",
+											"    pm.expect(data).to.have.property(\"created_date\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional logs\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"Password123@\",\r\n  \"confirmPassword\": \"Password123@\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/change/password/validation/changePassword",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"change",
+										"password",
+										"validation",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Registrasion_Customer",
+					"item": [
+						{
+							"name": "account",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifikasi kode status\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"// Verifikasi struktur dan nilai respons\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    // Parse response body to JSON\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Verify main response properties\r",
+											"    pm.expect(jsonData).to.have.property(\"code\", 201);\r",
+											"    pm.expect(jsonData).to.have.property(\"message\", \"Temporary registration success created\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"    // Verify data object\r",
+											"    pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"    var data = jsonData.data;\r",
+											"\r",
+											"    // Verify data_customer object\r",
+											"    pm.expect(data).to.have.property(\"data_customer\").that.is.an(\"object\");\r",
+											"\r",
+											"    var dataCustomer = data.data_customer;\r",
+											"\r",
+											"    pm.expect(dataCustomer).to.have.property(\"email\").that.is.a(\"string\");\r",
+											"    pm.expect(dataCustomer).to.have.property(\"username\").that.is.a(\"string\");\r",
+											"\r",
+											"    // Verify registration object\r",
+											"    pm.expect(data).to.have.property(\"registration\").that.is.an(\"object\");\r",
+											"\r",
+											"    var registration = data.registration;\r",
+											"\r",
+											"    pm.expect(registration).to.have.property(\"otp_code\").that.is.a(\"string\").and.not.empty;\r",
+											"    pm.expect(registration).to.have.property(\"otp_verified\", false);\r",
+											"    pm.expect(registration).to.have.property(\"otp_expired_date\").that.is.a(\"string\");\r",
+											"    pm.expect(registration).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"    pm.expect(registration).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// Verifikasi waktu respon\r",
+											"pm.test(\"Response time is less than 4000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+											"});\r",
+											"\r",
+											"// Optional: Additional logs for debugging\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											"console.log(\"Response Time:\", pm.response.responseTime, \"ms\");\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"api98@gmail.com\",\r\n  \"username\": \"user989\",\r\n  \"password\": \"Password1@\",\r\n  \"confirmPassword\": \"Password1@\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/registration/customer/account",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"registration",
+										"customer",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify_email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test to verify that the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    if (pm.response.code !== 200) {\r",
+											"        console.error(\"Expected status code 200, but got:\", pm.response.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test to verify that the response structure and values are correct\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Check if the response code is 200 before proceeding\r",
+											"    if (jsonData.code === 200) {\r",
+											"        pm.expect(jsonData).to.have.property(\"message\", \"Email verification success\");\r",
+											"        pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"        // Verify the structure of the data object\r",
+											"        pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"        // Verify data_customer structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"data_customer\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"email\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"username\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verify registration structure and store OTP for later validation\r",
+											"        pm.expect(jsonData.data).to.have.property(\"registration\").that.is.an(\"object\");\r",
+											"\r",
+											"        if (jsonData.data.registration) {\r",
+											"            let otpCode = jsonData.data.registration.otp_code;\r",
+											"            if (otpCode) {\r",
+											"                pm.environment.set(\"otpCode\", otpCode);\r",
+											"            }\r",
+											"\r",
+											"            // Check if properties exist before validating\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_code\").that.is.a(\"string\").and.not.empty;\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_verified\").that.is.a(\"boolean\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_expired_date\").that.is.a(\"string\");\r",
+											"\r",
+											"            // Check for optional properties\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"step\").that.is.a(\"number\").or.not.exist;\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"        } else {\r",
+											"            console.error(\"Registration data is missing in the response\");\r",
+											"        }\r",
+											"    } else {\r",
+											"        console.log(\"Unexpected response code:\", jsonData.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// Test to verify OTP is correctly stored and validated\r",
+											"pm.test(\"OTP is stored and valid\", function () {\r",
+											"    var otpCode = pm.environment.get(\"otpCode\");\r",
+											"\r",
+											"    if (otpCode) {\r",
+											"        var jsonData = pm.response.json();\r",
+											"        pm.expect(jsonData.data).to.have.property(\"registration\");\r",
+											"        pm.expect(jsonData.data.registration.otp_code).to.be.a(\"string\").and.not.empty;\r",
+											"        pm.expect(jsonData.data.registration.otp_verified).to.be.true;\r",
+											"    } else {\r",
+											"        console.error(\"OTP code is missing or not stored correctly\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// Log the entire response body\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"user989\",\r\n  \"otp\": \"653638\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/registration/customer/verifyEmail",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"registration",
+										"customer",
+										"verifyEmail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test to verify that the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    if (pm.response.code !== 200) {\r",
+											"        console.error(\"Expected status code 200, but got:\", pm.response.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test to verify that the response structure and values are correct\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Check if the response code is 200 before proceeding\r",
+											"    if (jsonData.code === 200) {\r",
+											"        pm.expect(jsonData).to.have.property(\"message\", \"Files uploaded successfully\");\r",
+											"        pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"        // Verify the structure of the data object\r",
+											"        pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"        // Verify data_customer structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"data_customer\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"email\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"username\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"fullname\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"nik\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"born_date\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"address\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verify data_account structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"data_account\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_no\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"atm_card_no\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"accountTypeId\").that.is.a(\"number\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"accountTypeCode\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"accountTypeName\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_purpose_id\").that.is.a(\"number\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_purpose\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verify document structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"document\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"ktp_url\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"photo_url\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"signature_url\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verify registration structure and store OTP for later validation\r",
+											"        pm.expect(jsonData.data).to.have.property(\"registration\").that.is.an(\"object\");\r",
+											"\r",
+											"        if (jsonData.data.registration) {\r",
+											"            let otpCode = jsonData.data.registration.otp_code;\r",
+											"            if (otpCode) {\r",
+											"                pm.environment.set(\"otpCode\", otpCode);\r",
+											"            }\r",
+											"\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_code\").that.is.a(\"string\").and.not.empty;\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_verified\").that.is.a(\"boolean\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"otp_expired_date\").that.is.a(\"string\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"created_at\").that.is.a(\"string\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"updated_at\").that.is.a(\"string\");\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"accessToken\").that.is.a(\"string\").and.not.empty;\r",
+											"            pm.expect(jsonData.data.registration).to.have.property(\"token_expDate\").that.is.a(\"string\");\r",
+											"        } else {\r",
+											"            console.error(\"Registration data is missing in the response\");\r",
+											"        }\r",
+											"    } else {\r",
+											"        console.log(\"Unexpected response code:\", jsonData.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// Test to verify OTP is correctly stored and valid\r",
+											"pm.test(\"OTP is stored and valid\", function () {\r",
+											"    var otpCode = pm.environment.get(\"otpCode\");\r",
+											"\r",
+											"    if (otpCode) {\r",
+											"        var jsonData = pm.response.json();\r",
+											"        pm.expect(jsonData.data).to.have.property(\"registration\");\r",
+											"        pm.expect(jsonData.data.registration.otp_code).to.be.a(\"string\").and.not.empty;\r",
+											"        pm.expect(jsonData.data.registration.otp_verified).to.be.true;\r",
+											"    } else {\r",
+											"        console.error(\"OTP code is missing or not stored correctly\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// Log the entire response body\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "user989",
+											"type": "text"
+										},
+										{
+											"key": "accountTypeId",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "fullname",
+											"value": "akun baru",
+											"type": "text"
+										},
+										{
+											"key": "nik",
+											"value": "3201010101010899",
+											"type": "text"
+										},
+										{
+											"key": "born_date",
+											"value": "2001-01-01",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "Medan",
+											"type": "text"
+										},
+										{
+											"key": "accountPurpose_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "ktp_document",
+											"type": "file",
+											"src": "postman-cloud:///1ef5f077-25af-4c70-b54f-1bc0924226e8"
+										},
+										{
+											"key": "photo_document",
+											"type": "file",
+											"src": "postman-cloud:///1ef5f077-25af-4c70-b54f-1bc0924226e8"
+										},
+										{
+											"key": "signature_document",
+											"type": "file",
+											"src": "postman-cloud:///1ef5f076-bfce-43c0-8da2-3c862b82cd84"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/registration/customer/profile",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"registration",
+										"customer",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create_pin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test to verify that the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    if (pm.response.code !== 200) {\r",
+											"        console.error(\"Expected status code 200, but got:\", pm.response.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test to verify that the response structure and values are correct\r",
+											"pm.test(\"Response has correct structure and values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    // Check if the response code is 200 before proceeding\r",
+											"    if (jsonData.code === 200) {\r",
+											"        pm.expect(jsonData).to.have.property(\"message\", \"PIN successfully created, please login with your username and password\");\r",
+											"        pm.expect(jsonData).to.have.property(\"status\", true);\r",
+											"\r",
+											"        // Verify the structure of the data object\r",
+											"        pm.expect(jsonData).to.have.property(\"data\").that.is.an(\"object\");\r",
+											"\r",
+											"        // Verify data_customer structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"data_customer\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"email\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"username\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"fullname\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"nik\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"born_date\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_customer).to.have.property(\"address\").that.is.a(\"string\");\r",
+											"\r",
+											"        // Verify data_account structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"data_account\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_no\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"atm_card_no\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"accountTypeId\").that.is.a(\"number\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"accountTypeName\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_purpose_id\").that.is.a(\"number\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"account_purpose\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.data_account).to.have.property(\"pin\").that.is.a(\"string\").and.not.empty;\r",
+											"\r",
+											"        // Verify document structure\r",
+											"        pm.expect(jsonData.data).to.have.property(\"document\").that.is.an(\"object\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"ktp_url\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"photo_url\").that.is.a(\"string\");\r",
+											"        pm.expect(jsonData.data.document).to.have.property(\"signature_url\").that.is.a(\"string\");\r",
+											"    } else {\r",
+											"        console.log(\"Unexpected response code:\", jsonData.code);\r",
+											"        console.log(\"Response Body:\", pm.response.text());\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// Log the entire response body\r",
+											"console.log(\"Response Body:\", pm.response.text());\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"pin\": \"121212\",\r\n  \"confirmPin\": \"121212\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/registration/customer/createPin/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFwaTk4QGdtYWlsLmNvbSIsImFjY291bnRfbm8iOiIwMTEwMDAwMTM1IiwidXNlcm5hbWUiOiJ1c2VyOTg5IiwiaWF0IjoxNzI0NzgwMzM5LCJleHAiOjE3MjQ4NjY3Mzl9.nEXlnyT3fPpYHRj-xuBr8YRjgUOM9roJpnT9KZ_tFvQ",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"registration",
+										"customer",
+										"createPin",
+										"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFwaTk4QGdtYWlsLmNvbSIsImFjY291bnRfbm8iOiIwMTEwMDAwMTM1IiwidXNlcm5hbWUiOiJ1c2VyOTg5IiwiaWF0IjoxNzI0NzgwMzM5LCJleHAiOjE3MjQ4NjY3Mzl9.nEXlnyT3fPpYHRj-xuBr8YRjgUOM9roJpnT9KZ_tFvQ"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reset PIN",
+					"item": [
+						{
+							"name": "PIN_Valid_card",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"expMonth\": 11,\r\n  \"expYear\": 2025\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/pin/validation/card",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"pin",
+										"validation",
+										"card"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PIN_Valid_birthday",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"born_date\": \"2002-11-22\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/pin/validation/birthDate",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"pin",
+										"validation",
+										"birthDate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PIN_Valid_email",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"email\": \"userbanktujuh@mail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/pin/validation/email",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"pin",
+										"validation",
+										"email"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PIN_Valid_OTP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"otp\": \"524412\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/pin/validation/otpVerify",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"pin",
+										"validation",
+										"otpVerify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PIN_Valid_ChangePin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlFBIEFwaSIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyNDc5NDQ2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoidldDeE1NWUc4Z3UzZy1IeVBtZENJd21jNEcwIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9._VL2QqEtZj92mSaWqHBccu52_11FE28izYq3LNH3UIQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"pin\": \"123654\",\r\n  \"confirmPin\": \"123654\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/pin/validation/changePin",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"pin",
+										"validation",
+										"changePin"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reset_password",
+					"item": [
+						{
+							"name": "validation card",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Check if the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Parse the response JSON\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// Validate the message\r",
+											"pm.test(\"Message is 'Card validation success'\", function () {\r",
+											"    pm.expect(jsonData.message).to.eql(\"Card validation success\");\r",
+											"});\r",
+											"\r",
+											"// Validate the response data\r",
+											"pm.test(\"Validate response data\", function () {\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"    pm.expect(jsonData.data.atm_card_no).to.eql(\"3737657598213519\");\r",
+											"    pm.expect(jsonData.data.account_no).to.eql(\"3737657598213569\");\r",
+											"    pm.expect(jsonData.data.account_type).to.eql(\"GOLD\");\r",
+											"    pm.expect(jsonData.data.balance).to.eql(999998018);\r",
+											"    pm.expect(jsonData.data.exp_date).to.eql(\"2025-11-22T00:00:00.000Z\");\r",
+											"    pm.expect(jsonData.data.flag_user.is_card_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_birth_valid).to.be.null;\r",
+											"    pm.expect(jsonData.data.flag_user.is_email_valid).to.be.null;\r",
+											"    pm.expect(jsonData.data.flag_user.is_verified).to.be.null;\r",
+											"    pm.expect(jsonData.data.flag_user.is_new_password).to.be.null;\r",
+											"    pm.expect(jsonData.data.step_validation).to.eql(1);\r",
+											"    pm.expect(jsonData.data.created_date).to.eql(\"2024-07-28T21:27:35.696Z\");\r",
+											"});\r",
+											"\r",
+											"// Validate the updated_at date format\r",
+											"pm.test(\"Check updated_at date format\", function () {\r",
+											"    const updatedAt = jsonData.data.flag_user.updated_at;\r",
+											"    const dateRegex = /^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\+\\d{2}:\\d{2}$/;\r",
+											"    pm.expect(updatedAt).to.match(dateRegex);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"expMonth\": 11,\r\n  \"expYear\": 2025\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/card",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"card"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "validation birthday",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Check if the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Parse the response JSON\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// Validate the message\r",
+											"pm.test(\"Message is 'Birth date validation success'\", function () {\r",
+											"    pm.expect(jsonData.message).to.eql(\"Birth date validation success\");\r",
+											"});\r",
+											"\r",
+											"// Validate the response data\r",
+											"pm.test(\"Validate response data\", function () {\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"    pm.expect(jsonData.data.atm_card_no).to.eql(\"3737657598213519\");\r",
+											"    pm.expect(jsonData.data.account_no).to.eql(\"3737657598213569\");\r",
+											"    pm.expect(jsonData.data.customer_id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.account_type).to.eql(\"GOLD\");\r",
+											"    pm.expect(jsonData.data.balance).to.eql(999998018);\r",
+											"    pm.expect(jsonData.data.customer_data.id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.customer_data.username).to.eql(\"qa.api\");\r",
+											"    pm.expect(jsonData.data.customer_data.fullname).to.eql(\"User Bank\");\r",
+											"    pm.expect(jsonData.data.customer_data.email).to.eql(\"qa.api@mail.com\");\r",
+											"    pm.expect(jsonData.data.customer_data.born_date).to.eql(\"2002-11-22\");\r",
+											"    pm.expect(jsonData.data.flag_user.is_card_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_birth_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_email_valid).to.be.null;\r",
+											"    pm.expect(jsonData.data.flag_user.is_verified).to.be.null;\r",
+											"    pm.expect(jsonData.data.flag_user.is_new_password).to.be.null;\r",
+											"    \r",
+											"    // Correctly check step_validation outside of data\r",
+											"    pm.expect(jsonData.step_validation).to.eql(2); \r",
+											"\r",
+											"    pm.expect(jsonData.created_date).to.eql(\"2024-07-28T21:27:35.696Z\");\r",
+											"});\r",
+											"\r",
+											"// Validate the updated_at date format\r",
+											"pm.test(\"Check updated_at date format\", function () {\r",
+											"    const updatedAt = jsonData.data.flag_user.updated_at;\r",
+											"    const dateRegex = /^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\+\\d{2}:\\d{2}$/;\r",
+											"    pm.expect(updatedAt).to.match(dateRegex);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"born_date\": \"2002-11-22\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/birthDate",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"birthDate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "validation email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Check if the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Parse the response JSON\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// Log the actual OTP and flag_user values for debugging\r",
+											"console.log(\"Actual OTP: \" + jsonData.data.otp_code.otp);\r",
+											"console.log(\"Actual Flag User: \", jsonData.data.flag_user);\r",
+											"\r",
+											"// Validate the message\r",
+											"pm.test(\"Message is 'Email validation success, check your email for OTP code'\", function () {\r",
+											"    pm.expect(jsonData.message).to.eql(\"Email validation success, check your email for OTP code\");\r",
+											"});\r",
+											"\r",
+											"// Validate the response data\r",
+											"pm.test(\"Validate response data\", function () {\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"    pm.expect(jsonData.data.atm_card_no).to.eql(\"3737657598213519\");\r",
+											"    pm.expect(jsonData.data.account_no).to.eql(\"3737657598213569\");\r",
+											"    pm.expect(jsonData.data.customer_id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.account_type).to.eql(\"GOLD\");\r",
+											"    pm.expect(jsonData.data.balance).to.eql(999998018);\r",
+											"    \r",
+											"    pm.expect(jsonData.data.customer_data.id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.customer_data.username).to.eql(\"qa.api\");\r",
+											"    pm.expect(jsonData.data.customer_data.fullname).to.eql(\"User Bank\");\r",
+											"    pm.expect(jsonData.data.customer_data.email).to.eql(\"qa.api@mail.com\");\r",
+											"    pm.expect(jsonData.data.customer_data.born_date).to.eql(\"2002-11-22\");\r",
+											"    \r",
+											"    pm.expect(jsonData.data.flag_user.is_card_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_birth_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_email_valid).to.be.true;\r",
+											"\r",
+											"    // Check if is_verified and is_new_password values are either true or null\r",
+											"    pm.test(\"Check is_verified and is_new_password values\", function () {\r",
+											"        const isVerified = jsonData.data.flag_user.is_verified;\r",
+											"        const isNewPassword = jsonData.data.flag_user.is_new_password;\r",
+											"\r",
+											"        pm.expect(isVerified).to.satisfy((value) => value === null || value === true);\r",
+											"        pm.expect(isNewPassword).to.satisfy((value) => value === null || value === true);\r",
+											"    });\r",
+											"\r",
+											"    // Validate OTP format instead of value\r",
+											"    pm.test(\"OTP is a valid 6-digit number\", function () {\r",
+											"        const otpRegex = /^\\d{6}$/;\r",
+											"        pm.expect(jsonData.data.otp_code.otp).to.match(otpRegex);\r",
+											"    });\r",
+											"\r",
+											"    pm.expect(jsonData.stepValidation).to.eql(3);\r",
+											"    pm.expect(jsonData.created_date).to.eql(\"2024-07-28T21:27:35.696Z\");\r",
+											"});\r",
+											"\r",
+											"// Validate the updated_at and otp_expired_date date formats\r",
+											"pm.test(\"Check date formats\", function () {\r",
+											"    const updatedAt = jsonData.data.flag_user.updated_at;\r",
+											"    const otpExpiredDate = jsonData.data.otp_code.otp_expired_date;\r",
+											"    const dateRegex = /^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\+\\d{2}:\\d{2}$/;\r",
+											"\r",
+											"    pm.expect(updatedAt).to.match(dateRegex);\r",
+											"    pm.expect(otpExpiredDate).to.match(dateRegex);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"email\": \"qa.api@mail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/email",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"email"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "validation otp",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Check if the status code is 200\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Parse the response JSON\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// Log the actual OTP for debugging\r",
+											"console.log(\"Actual OTP: \" + jsonData.data.otp_code.otp);\r",
+											"\r",
+											"// Validate the message\r",
+											"pm.test(\"Message is 'OTP verification success'\", function () {\r",
+											"    pm.expect(jsonData.message).to.eql(\"OTP verification success\");\r",
+											"});\r",
+											"\r",
+											"// Validate the response data\r",
+											"pm.test(\"Validate response data\", function () {\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"    pm.expect(jsonData.data.atm_card_no).to.eql(\"3737657598213519\");\r",
+											"    pm.expect(jsonData.data.account_no).to.eql(\"3737657598213569\");\r",
+											"    pm.expect(jsonData.data.customer_id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.account_type).to.eql(\"GOLD\");\r",
+											"    pm.expect(jsonData.data.balance).to.eql(999998018);\r",
+											"    \r",
+											"    pm.expect(jsonData.data.customer_data.id).to.eql(\"10\");\r",
+											"    pm.expect(jsonData.data.customer_data.username).to.eql(\"qa.api\");\r",
+											"    pm.expect(jsonData.data.customer_data.fullname).to.eql(\"User Bank\");\r",
+											"    pm.expect(jsonData.data.customer_data.email).to.eql(\"qa.api@mail.com\");\r",
+											"    pm.expect(jsonData.data.customer_data.born_date).to.eql(\"2002-11-22\");\r",
+											"    \r",
+											"    pm.expect(jsonData.data.flag_user.is_card_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_birth_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_email_valid).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_verified).to.be.true;\r",
+											"    pm.expect(jsonData.data.flag_user.is_new_password).to.be.null;\r",
+											"\r",
+											"    // Validate OTP value\r",
+											"    pm.expect(jsonData.data.otp_code.otp).to.eql(\"826657\");\r",
+											"\r",
+											"    pm.expect(jsonData.stepValidation).to.eql(4);\r",
+											"    pm.expect(jsonData.created_date).to.eql(\"2024-07-28T21:27:35.696Z\");\r",
+											"});\r",
+											"\r",
+											"// Validate the updated_at and otp_expired_date date formats\r",
+											"pm.test(\"Check date formats\", function () {\r",
+											"    const updatedAt = jsonData.data.flag_user.updated_at;\r",
+											"    const otpExpiredDate = jsonData.data.otp_code.otp_expired_date;\r",
+											"    const dateRegex = /^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\+\\d{2}:\\d{2}$/;\r",
+											"\r",
+											"    pm.expect(updatedAt).to.match(dateRegex);\r",
+											"    pm.expect(otpExpiredDate).to.match(dateRegex);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"otp\": \"826657\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/otpVerify",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"otpVerify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlVzZXIgQmFuayIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyMzEzNTYzOSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoiekNxRFFnd2x5N3A4RzIxaExnS183TVhfVE1jIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9.fgu3Dq2PxjEm441YsGk1vmh1yCidTuuNtVSTfOuHkoQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"password\": \"passworddd1234\",\r\n  \"confirmPassword\": \"passworddd1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/changePassword",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "validation_pin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIl0sImZ1bGxfbmFtZSI6IlVzZXIgQmFuayIsInVzZXJfbmFtZSI6InFhLmFwaSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJpZCI6MTAsImV4cCI6MTcyMzEzNTYzOSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TVVBFUlVTRVIiLCJST0xFX1VTRVIiXSwianRpIjoiekNxRFFnd2x5N3A4RzIxaExnS183TVhfVE1jIiwiY2xpZW50X2lkIjoibXktY2xpZW50LXdlYiJ9.fgu3Dq2PxjEm441YsGk1vmh1yCidTuuNtVSTfOuHkoQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"atm_card_no\": \"3737657598213519\",\r\n  \"pin\": \"12345678910\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://simplebank.my.id/v1/reset/password/validation/pin",
+									"protocol": "https",
+									"host": [
+										"simplebank",
+										"my",
+										"id"
+									],
+									"path": [
+										"v1",
+										"reset",
+										"password",
+										"validation",
+										"pin"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
